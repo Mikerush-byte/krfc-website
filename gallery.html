@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Gallery – GreenRoots</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="style.css"/>
+  <style>
+    /* ===== GALLERY FILTERS ===== */
+    .filter-bar {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      padding: 40px 5% 20px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .filter-btn {
+      padding: 10px 24px;
+      border-radius: 50px;
+      border: 1.5px solid #d0ccc0;
+      background: transparent;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: var(--text-mid);
+      cursor: pointer;
+      transition: all 0.3s ease;
+      letter-spacing: 0.3px;
+    }
+    .filter-btn:hover {
+      border-color: var(--green-mid);
+      color: var(--green-mid);
+    }
+    .filter-btn.active {
+      background: var(--green-mid);
+      border-color: var(--green-mid);
+      color: var(--white);
+    }
+
+    /* ===== GALLERY GRID ===== */
+    .gallery-section {
+      padding: 20px 5% 80px;
+    }
+    .gallery-grid {
+      max-width: 1200px;
+      margin: 0 auto;
+      columns: 3;
+      column-gap: 20px;
+    }
+    .gallery-item {
+      break-inside: avoid;
+      margin-bottom: 20px;
+      border-radius: 16px;
+      overflow: hidden;
+      position: relative;
+      cursor: pointer;
+      background: var(--green-dark);
+      transition: transform 0.35s ease, box-shadow 0.35s ease;
+    }
+    .gallery-item:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 20px 50px rgba(0,0,0,0.2);
+    }
+    .gallery-item:hover .gallery-overlay {
+      opacity: 1;
+    }
+    .gallery-placeholder {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      color: rgba(255,255,255,0.6);
+      font-size: 0.85rem;
+      font-family: 'DM Sans', sans-serif;
+      background: linear-gradient(135deg, var(--green-dark), var(--green-mid));
+    }
+    .gallery-placeholder.tall { height: 320px; }
+    .gallery-placeholder.medium { height: 220px; }
+    .gallery-placeholder.short { height: 180px; }
+    .gallery-placeholder.purple { background: linear-gradient(135deg, #2d1040, #7b3fa0); }
+    .gallery-placeholder.gold { background: linear-gradient(135deg, #3a2a00, #8a6010); }
+    .gallery-placeholder span { font-size: 2.5rem; }
+    .gallery-placeholder p { text-align: center; padding: 0 16px; line-height: 1.5; }
+
+    .gallery-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(0,0,0,0.75) 0%, transparent 60%);
+      opacity: 0;
+      transition: opacity 0.35s ease;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 20px;
+    }
+    .overlay-title {
+      color: var(--white);
+      font-family: 'Playfair Display', serif;
+      font-size: 1rem;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+    .overlay-tag {
+      display: inline-block;
+      background: rgba(201,168,76,0.8);
+      color: var(--green-dark);
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      padding: 3px 10px;
+      border-radius: 50px;
+    }
+
+    /* ===== LIGHTBOX ===== */
+    .lightbox {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.92);
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+    .lightbox.open {
+      opacity: 1;
+      pointer-events: all;
+    }
+    .lightbox-inner {
+      background: var(--green-dark);
+      border-radius: 20px;
+      overflow: hidden;
+      max-width: 700px;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      transform: scale(0.9);
+      transition: transform 0.3s ease;
+    }
+    .lightbox.open .lightbox-inner {
+      transform: scale(1);
+    }
+    .lightbox-image {
+      height: 380px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 5rem;
+    }
+    .lightbox-body {
+      padding: 28px 32px;
+    }
+    .lightbox-body h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--white);
+      margin-bottom: 8px;
+    }
+    .lightbox-body p {
+      font-size: 0.9rem;
+      color: rgba(255,255,255,0.65);
+      line-height: 1.6;
+      margin-bottom: 16px;
+    }
+    .lightbox-close {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.1);
+      border: none;
+      color: var(--white);
+      font-size: 1.4rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s;
+    }
+    .lightbox-close:hover { background: rgba(255,255,255,0.2); }
+    .lightbox-nav {
+      display: flex;
+      justify-content: space-between;
+      padding: 0 32px 28px;
+    }
+    .lightbox-nav button {
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.15);
+      color: var(--white);
+      padding: 10px 24px;
+      border-radius: 8px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.88rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .lightbox-nav button:hover { background: rgba(255,255,255,0.15); }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 900px) {
+      .gallery-grid { columns: 2; }
+    }
+    @media (max-width: 560px) {
+      .gallery-grid { columns: 1; }
+      .lightbox { padding: 16px; }
+      .lightbox-image { height: 240px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="main-nav">
+  <a class="logo" href="index.html">
+    🌿 <div><div>GreenRoots</div><span>Agricultural Company</span></div>
+  </a>
+  <ul class="nav-links" id="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="youth.html">Youth College</a></li>
+    <li><a href="women.html">Women's College</a></li>
+    <li><a href="about.html">About</a></li>
+    <li><a href="gallery.html" class="active">Gallery</a></li>
+    <li><a href="contact.html">Contact</a></li>
+  </ul>
+  <div class="hamburger" id="hamburger" onclick="toggleMenu()">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+
+<!-- SCROLLING TICKER -->
+<div class="ticker-wrap">
+  <div class="ticker-label">NEWS</div>
+  <div class="ticker-track">
+    <div class="ticker-item">Add your latest news or announcement here</div>
+    <div class="ticker-item">Youth Agricultural College — Enrollment Now Open</div>
+    <div class="ticker-item">Women's College Empowerment Program — Applications Accepted</div>
+    <div class="ticker-item">Annual Harvest Festival — Add Date Here</div>
+    <div class="ticker-item">New Training Programs Available — Learn More Today</div>
+    <div class="ticker-item">Sustainable Farming Workshops — Register Your Interest</div>
+    <div class="ticker-item">Add your latest news or announcement here</div>
+    <div class="ticker-item">Youth Agricultural College — Enrollment Now Open</div>
+    <div class="ticker-item">Women's College Empowerment Program — Applications Accepted</div>
+    <div class="ticker-item">Annual Harvest Festival — Add Date Here</div>
+    <div class="ticker-item">New Training Programs Available — Learn More Today</div>
+    <div class="ticker-item">Sustainable Farming Workshops — Register Your Interest</div>
+  </div>
+</div>
+
+<!-- INNER HERO -->
+<div class="inner-hero">
+  <div class="inner-hero-content">
+    <div class="breadcrumb">
+      <a href="index.html">Home</a> › Gallery
+    </div>
+    <h1>Our <span>Gallery</span></h1>
+    <p>A visual journey through our farms, programs, communities, and the people who make GreenRoots what it is.</p>
+  </div>
+</div>
+
+<!-- FILTER BAR -->
+<div class="filter-bar" id="filter-bar">
+  <button class="filter-btn active" onclick="filterGallery('all', this)">All Photos</button>
+  <button class="filter-btn" onclick="filterGallery('farming', this)">Farming</button>
+  <button class="filter-btn" onclick="filterGallery('youth', this)">Youth College</button>
+  <button class="filter-btn" onclick="filterGallery('women', this)">Women's College</button>
+  <button class="filter-btn" onclick="filterGallery('community', this)">Community</button>
+  <button class="filter-btn" onclick="filterGallery('events', this)">Events</button>
+</div>
+
+<!-- GALLERY GRID -->
+<section class="gallery-section">
+  <div class="gallery-grid" id="gallery-grid">
+
+    <div class="gallery-item" data-category="farming" data-title="Add Photo Title" data-desc="Add a description for this photo. Replace with your real image." onclick="openLightbox(this)">
+      <div class="gallery-placeholder tall">
+        <span>🌾</span>
+        <p>Add your farming photo here</p>
+      </div>
+      <div class="gallery-overlay">
+        <div class="overlay-title">Add Photo Title</div>
+        <span class="overlay-tag">Farming</span>
+      </div>
+    </div>
+
+    <div class="gallery-item" data-category="youth" data-title="Add Photo Title" data-desc="Add a description for this photo. Replace with your real image." onclick="openLightbox(this)">
+      <div class="gallery-placeholder medium">
+        <span>🌱</span>
+        <p>Add your youth college photo here</p>
+      </div>
+      <div class="gallery-overlay">
+        <div class="overlay-title">Add Photo Title</div>
+        <span class="overlay-tag">Youth College</span>
+      </div>
+    </div>
+
+    <div class="gallery-item" data-category="women" data-title="Add Photo Title" data-desc="Add a description for this photo. Replace with your real image." onclick="openLightbox(this)">
+      <div class="gallery-placeholder short purple">
+        <span>🌸</span>
+        <p>Add your women's college photo here</p>
+      </div>
+      <div class="gallery-overlay">
+        <div class="overlay-title">Add Photo Title</div>
+        <span class="overlay-tag">Women's College</span>
+      </div>
+    </div>
+
+    <div class="gallery-item" data-category="community" data-title="Add Photo Title" data-desc="Add a description for this photo. Replace with your real image." onclick="openLightbox(this)">
+      <div class="gallery-placeholder medium">
+        <span>🤝</span>
+        <p>Add your community photo here</p>
+      </div>
+      <div class="gallery-overlay">
+        <div class="overlay-title">Add Photo Title</div>
+        <span class="overlay-tag">Community</span>
+      </div>
+    </div>
+
+    <div class="gallery-item" data-category="events" data-title="Add Photo Title" data-desc="Add a description for this photo. Replace with your real image." onclick="openLightbox(this)">
+      <div class="gallery-placeholder tall gold">
+        <span>🎉</span>
+        <p>Add your events photo here</p>
+      </div>
+      <div class="gallery-overlay">
+        <div class="overlay-title">Add Photo Title</div>
+        <span class="overlay-tag">Events</span>
+      </div>
+    </div>
+
+    <div class="gallery-item" data-category="farming" data-title="Add Photo Title" data-desc="Add a description for this photo. Replace with your real image." onclick="openLightbox(this)">
+      <div class="gallery-placeholder short">
+        <span>🚜</span>
+        <p>Add your farming photo here</p>
+      </div>
+      <div class="gallery-overlay">
+        <div class="overlay-title">Add Photo Title</div>
+        <span class="overlay-tag">Farming</span>
+      </div>
+    </div>
+
+    <div class="gallery-item" data-category="youth" data-title="Add Photo Title" data-desc="Add a description for this photo. Replace with your real image." onclick="openLightbox(this)">
+      <div class="gallery-placeholder tall">
+        <span>👨‍🌾</span>
+        <p>Add your youth college photo here</p>
+      </div>
+      <div class="gallery-overlay">
+        <div class="overlay-title">Add Photo Title</div>
+        <span class="overlay-tag">Youth College</span>
+      </div>
+    </div>
+
+    <div class="gallery-item" data-category="community" data-title="Add Photo Title" data-desc="Add a description for this photo. Replace with your real image." onclick="openLightbox(this)">
+      <div class="gallery-placeholder short purple">
+        <span>🏘️</span>
+        <p>Add your community photo here</p>
+      </div>
+      <div class="gallery-overlay">
+        <div class="overlay-title">Add Photo Title</div>
+        <span class="overlay-tag">Community</span>
+      </div>
+    </div>
+
+    <div class="gallery-item" data-category="women" data-title="Add Photo Title" data-desc="Add a description for this photo. Replace with your real image." onclick="openLightbox(this)">
+      <div class="gallery-placeholder medium purple">
+        <span>👩‍🌾</span>
+        <p>Add your women's college photo here</p>
+      </div>
+      <div class="gallery-overlay">
+        <div class="overlay-title">Add Photo Title</div>
+        <span class="overlay-tag">Women's College</span>
+      </div>
+    </div>
+
+    <div class="gallery-item" data-category="events" data-title="Add Photo Title" data-desc="Add a description for this photo. Replace with your real image." onclick="openLightbox(this)">
+      <div class="gallery-placeholder medium gold">
+        <span>🌍</span>
+        <p>Add your events photo here</p>
+      </div>
+      <div class="gallery-overlay">
+        <div class="overlay-title">Add Photo Title</div>
+        <span class="overlay-tag">Events</span>
+      </div>
+    </div>
+
+    <div class="gallery-item" data-category="farming" data-title="Add Photo Title" data-desc="Add a description for this photo. Replace with your real image." onclick="openLightbox(this)">
+      <div class="gallery-placeholder short">
+        <span>🌿</span>
+        <p>Add your farming photo here</p>
+      </div>
+      <div class="gallery-overlay">
+        <div class="overlay-title">Add Photo Title</div>
+        <span class="overlay-tag">Farming</span>
+      </div>
+    </div>
+
+    <div class="gallery-item" data-category="community" data-title="Add Photo Title" data-desc="Add a description for this photo. Replace with your real image." onclick="openLightbox(this)">
+      <div class="gallery-placeholder tall gold">
+        <span>💚</span>
+        <p>Add your community photo here</p>
+      </div>
+      <div class="gallery-overlay">
+        <div class="overlay-title">Add Photo Title</div>
+        <span class="overlay-tag">Community</span>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- LIGHTBOX -->
+<div class="lightbox" id="lightbox" onclick="closeLightboxOutside(event)">
+  <button class="lightbox-close" onclick="closeLightbox()">✕</button>
+  <div class="lightbox-inner">
+    <div class="lightbox-image" id="lightbox-image"></div>
+    <div class="lightbox-body">
+      <h3 id="lightbox-title"></h3>
+      <p id="lightbox-desc"></p>
+    </div>
+    <div class="lightbox-nav">
+      <button onclick="navigateLightbox(-1)">← Previous</button>
+      <button onclick="navigateLightbox(1)">Next →</button>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <a class="logo" href="index.html">KRFC</a>
+      <p>Add a short description of your company's mission and the communities you serve. This is the footer summary — keep it brief and memorable.</p>
+      <div class="social-links">
+        <a class="social-link" title="Facebook">F</a>
+        <a class="social-link" title="Twitter">X</a>
+        <a class="social-link" title="Instagram">IG</a>
+        <a class="social-link" title="LinkedIn">LN</a>
+        <a class="social-link" title="YouTube">Y</a>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h5>Quick Links</h5>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="youth.html">Youth College</a></li>
+        <li><a href="women.html">Women's College</a></li>
+        <li><a href="about.html">About Us</a></li>
+        <li><a href="gallery.html">Gallery</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h5>Programs</h5>
+      <ul>
+        <li><a href="youth.html">Youth Agriculture</a></li>
+        <li><a href="women.html">Women's Empowerment</a></li>
+      </ul>
+    </div>
+    <div class="footer-col footer-newsletter">
+      <h5>Stay Updated</h5>
+      <p>Subscribe to our newsletter for the latest news, program updates, and agricultural insights.</p>
+      <div class="newsletter-form">
+        <input type="email" placeholder="Enter your email" />
+        <button onclick="subscribeNewsletter()">Join</button>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2025 KRFC/AITAP. All rights reserved.</p>
+    <div class="footer-bottom-links">
+      <a href="#">Privacy Policy</a>
+      <a href="#">Terms of Use</a>
+    </div>
+  </div>
+</footer>
+
+<div class="toast" id="toast"></div>
+<script src="script.js"></script>
+<script>
+  // ===== FILTER =====
+  function filterGallery(category, btn) {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+
+    document.querySelectorAll('.gallery-item').forEach(item => {
+      if (category === 'all' || item.dataset.category === category) {
+        item.style.display = 'block';
+        item.style.animation = 'fadeInUp 0.4s ease both';
+      } else {
+        item.style.display = 'none';
+      }
+    });
+  }
+
+  // ===== LIGHTBOX =====
+  let currentIndex = 0;
+  let visibleItems = [];
+
+  function openLightbox(el) {
+    visibleItems = [...document.querySelectorAll('.gallery-item')].filter(i => i.style.display !== 'none');
+    currentIndex = visibleItems.indexOf(el);
+    updateLightbox();
+    document.getElementById('lightbox').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function updateLightbox() {
+    const item = visibleItems[currentIndex];
+    const emoji = item.querySelector('.gallery-placeholder span').textContent;
+    const bg = item.querySelector('.gallery-placeholder').style.background ||
+                getComputedStyle(item.querySelector('.gallery-placeholder')).background;
+
+    document.getElementById('lightbox-image').textContent = emoji;
+    document.getElementById('lightbox-image').style.background =
+      item.querySelector('.gallery-placeholder').classList.contains('purple')
+        ? 'linear-gradient(135deg, #2d1040, #7b3fa0)'
+        : item.querySelector('.gallery-placeholder').classList.contains('gold')
+        ? 'linear-gradient(135deg, #3a2a00, #8a6010)'
+        : 'linear-gradient(135deg, var(--green-dark), var(--green-mid))';
+    document.getElementById('lightbox-image').style.fontSize = '5rem';
+    document.getElementById('lightbox-title').textContent = item.dataset.title;
+    document.getElementById('lightbox-desc').textContent = item.dataset.desc;
+  }
+
+  function navigateLightbox(dir) {
+    currentIndex = (currentIndex + dir + visibleItems.length) % visibleItems.length;
+    updateLightbox();
+  }
+
+  function closeLightbox() {
+    document.getElementById('lightbox').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  function closeLightboxOutside(e) {
+    if (e.target === document.getElementById('lightbox')) closeLightbox();
+  }
+
+  // Keyboard navigation
+  document.addEventListener('keydown', function(e) {
+    const lb = document.getElementById('lightbox');
+    if (!lb.classList.contains('open')) return;
+    if (e.key === 'Escape') closeLightbox();
+    if (e.key === 'ArrowRight') navigateLightbox(1);
+    if (e.key === 'ArrowLeft') navigateLightbox(-1);
+  });
+</script>
+</body>
+</html>

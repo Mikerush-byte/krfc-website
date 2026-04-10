@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Youth College – KRFC</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+
+<!-- NAVIGATION -->
+<nav id="main-nav">
+  <a class="logo" href="index.html">
+     <div><div>KRFC</div><span>Kenya Rural Food Centre</span></div>
+  </a>
+  <ul class="nav-links" id="nav-links">
+    <li><a href="index.html" id="nav-home" class="active">Home</a></li>
+    <li class="dropdown">
+      <a href="#" class="dropdown-toggle">Company</a>
+      <div class="dropdown-menu">
+        <a href="profile.html">Company Profile</a>
+        <a href="team.html">Our Team</a>
+        <a href="partners.html">Partners</a>
+      </div>
+    </li>
+    <li><a href="youth.html" id="nav-youth">Youth College</a></li>
+    <li><a href="women.html" id="nav-women">Women's College</a></li>
+    <li><a href="about.html" id="nav-about">About</a></li>
+    <li><a href="contact.html" id="nav-contact">Contact</a></li>
+  </ul>
+  <div class="hamburger" id="hamburger" onclick="toggleMenu()">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+
+<!-- NEWS TICKER -->
+<div class="ticker-wrap">
+  <div class="ticker-label">NEWS</div>
+  <div class="ticker-track">
+    <div class="ticker-item">Women's College Empowerment Program — Applications Now Accepted</div>
+    <div class="ticker-item">Youth Agricultural Training — Enroll for Spring Semester</div>
+    <div class="ticker-item">New Partnerships Announced — Expanding Market Access for Farmers</div>
+  </div>
+</div>
+
+<!-- HERO SECTION -->
+<section class="hero">
+  <div class="hero-content">
+    <h1>KENYA RURAL FOOD CENTER YOUTH COLLEGE</h1>
+    <p>Kenya Rural Food Centre Youth college for agriculture focus on transforming farming into a modern, profitable, and sustainable career for young people, 
+      specifically addressing the aging farming population and youth unemployment. They offer hands-on, competence-based technical 
+      and vocational training (TVET) to bridge the gap between traditional farming and modern agricultural technologies</p>
+    <div class="hero-buttons">
+      <a href="about.html" class="btn-primary">Learn More</a>
+      <a href="contact.html" class="btn-outline">Get In Touch</a>
+    </div>
+  </div>
+</section>
+<br>
+<!--CONTENT-->
+
+
+
+
+
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <a class="logo" href="index.html">KRFC</a>
+      <p>Transforming rural agriculture through education, innovation, and sustainable development.</p>
+      <div class="social-links">
+        <a class="social-link" href="#" title="Facebook">f</a>
+        <a class="social-link" href="#" title="Twitter">x</a>
+        <a class="social-link" href="#" title="Instagram">in</a>
+        <a class="social-link" href="#" title="LinkedIn">li</a>
+        <a class="social-link" href="#" title="YouTube">yt</a>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h5>Quick Links</h5>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="profile.html">Company Profile</a></li>
+        <li><a href="team.html">Our Team</a></li>
+        <li><a href="about.html">About Us</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h5>Programs</h5>
+      <ul>
+        <li><a href="youth.html">Youth College</a></li>
+        <li><a href="women.html">Women's College</a></li>
+        <li><a href="partners.html">Partners</a></li>
+        <li><a href="about.html">About</a></li>
+      </ul>
+    </div>
+    <div class="footer-col footer-newsletter">
+      <h5>Stay Updated</h5>
+      <p>Subscribe for the latest news and program updates.</p>
+      <div class="newsletter-form">
+        <input type="email" placeholder="your@email.com"/>
+        <button onclick="subscribeNewsletter()">Subscribe</button>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2025 Kenya Rural Food Centre. All rights reserved.</p>
+    <div class="footer-bottom-links">
+      <a href="#">Privacy Policy</a>
+      <a href="#">Terms of Use</a>
+    </div>
+  </div>
+</footer>
+
+<div class="toast" id="toast"></div>
+<script src="script.js"></script>
+</body>
+</html>
