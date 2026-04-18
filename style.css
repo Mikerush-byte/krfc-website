@@ -403,30 +403,36 @@ nav {
 }
 
 .initiatives-container {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
 }
 
 .initiative-card {
   background: var(--cream);
-  border-radius: 12px;
+  border-radius: 0;
   overflow: hidden;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
   transition: var(--transition);
-  border: 1px solid var(--border-color);
+  border-left: 6px solid var(--green-mid);
+  border-top: 1px solid var(--border-color);
+  border-right: 1px solid var(--border-color);
+  border-bottom: 1px solid var(--border-color);
 }
 
 .initiative-card:hover {
-  transform: translateY(-8px);
+  transform: translateX(10px);
   box-shadow: var(--shadow);
-  border-color: var(--gold);
+  border-left-color: var(--gold);
 }
 
 .initiative-image-placeholder {
+  display: none;
   width: 100%;
   height: 220px;
   background: linear-gradient(135deg, rgba(45,106,53,0.08) 0%, rgba(201,168,76,0.08) 100%);
-  display: flex;
   align-items: center;
   justify-content: center;
   font-size: 0.9rem;
@@ -439,7 +445,7 @@ nav {
   font-family: 'Playfair Display', serif;
   font-size: 1.3rem;
   color: var(--green-dark);
-  margin: 24px 24px 12px;
+  margin: 20px 24px 10px;
 }
 
 .initiative-card p {
