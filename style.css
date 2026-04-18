@@ -499,7 +499,7 @@ nav {
 }
 
 .program-card {
-  background: var(--white);
+  background: var(--smoke-white);
   border: 1px solid var(--border-color);
   border-radius: 12px;
   overflow: hidden;
